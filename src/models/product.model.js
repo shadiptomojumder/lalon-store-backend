@@ -23,6 +23,7 @@ const productSchema = new Schema(
         productCategory: {
             type: String,
             required: true,
+            lowercase: true,
             trim: true,
             index: true,
         },

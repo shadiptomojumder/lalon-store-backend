@@ -14,46 +14,107 @@ const CreateProduct = asyncHandler(async (req, res) => {
             productQuantity,
             productCategory,
             productDescription,
+            productImage,
+            productImageOne,
+            productImageTwo,
+            productImageThree,
         } = req.body;
         console.log("The data is:", req.body);
 
-        let productImageUrl = "";
-        if (!productImageUrl && req.body.productImage) {
-            const productImagePath = Base64ToFileConverter(
-                req.body.productImage,
-                "./public/temp/categoryImage.jpg"
-            );
-            const productImageUpload = await uploadOnCloudinary(
-                String(productImagePath)
-            );
-            productImageUrl = productImageUpload.url;
-        }
+        // let productImageUrl = "";
+        // if (!productImageUrl && req.body.productImage) {
+        //     const productImagePath = Base64ToFileConverter(
+        //         req.body.productImage,
+        //         "./public/temp/categoryImage.jpg"
+        //     );
+        //     const productImageUpload = await uploadOnCloudinary(
+        //         String(productImagePath)
+        //     );
+        //     productImageUrl = productImageUpload.url;
+        // }
         // Here i check if any field are empty
-        let productImageOneUrl = "";
-        if (!productImageOneUrl && req.body.productImageOne) {
-            const productImageOnePath = Base64ToFileConverter(
-                req.body.productImageOne,
-                "./public/temp/categoryImage.jpg"
-            );
-            const productImageOneUpload = await uploadOnCloudinary(
-                String(productImageOnePath)
-            );
-            productImageOneUrl = productImageOneUpload.url;
-        }
+        // let productImageOneUrl = "";
+        // if (!productImageOneUrl && req.body.productImageOne) {
+        //     const productImageOnePath = Base64ToFileConverter(
+        //         req.body.productImageOne,
+        //         "./public/temp/categoryImage.jpg"
+        //     );
+        //     const productImageOneUpload = await uploadOnCloudinary(
+        //         String(productImageOnePath)
+        //     );
+        //     productImageOneUrl = productImageOneUpload.url;
+        // }
         // Here i check if any field are empty
-        let productImageTwoUrl = "";
-        if (!productImageTwoUrl && req.body.productImageTwo) {
-            const productImageTwoPath = Base64ToFileConverter(
-                req.body.productImageTwo,
-                "./public/temp/categoryImage.jpg"
-            );
-            const productImageTwoUpload = await uploadOnCloudinary(
-                String(productImageTwoPath)
-            );
-            productImageTwoUrl = productImageTwoUpload.url;
-        }
+        // let productImageTwoUrl = "";
+        // if (!productImageTwoUrl && req.body.productImageTwo) {
+        //     const productImageTwoPath = Base64ToFileConverter(
+        //         req.body.productImageTwo,
+        //         "./public/temp/categoryImage.jpg"
+        //     );
+        //     const productImageTwoUpload = await uploadOnCloudinary(
+        //         String(productImageTwoPath)
+        //     );
+        //     productImageTwoUrl = productImageTwoUpload.url;
+        // }
         // Here i check if any field are empty
-        let productImageThreeUrl = "";
+        // let productImageThreeUrl = "";
+        // if (!productImageThreeUrl && req.body.productImageThree) {
+        //     const productImageThreePath = Base64ToFileConverter(
+        //         req.body.productImageThree,
+        //         "./public/temp/categoryImage.jpg"
+        //     );
+        //     const productImageThreeUpload = await uploadOnCloudinary(
+        //         String(productImageThreePath)
+        //     );
+        //     productImageThreeUrl = productImageThreeUpload.url;
+        // }
+
+        // Here i check if any field are empty
+        // if (
+        //     [
+        //         productName,
+        //         productPrice,
+        //         productQuantity,
+        //         productCategory,
+        //         productDescription,
+        //     ].some((field) => field.trim() === "")
+        // ) {
+        //     throw new ApiError(400, "Fill all the fields");
+        // }
+
+          // Validate required fields
+          if (
+            [productName, productPrice, productQuantity, productCategory, productDescription]
+                .some((field) => typeof field === 'string' ? field.trim() === "" : !field)
+        ) {
+            throw new ApiError(400, "Fill all the fields");
+        }
+
+        // Check if the product already exists
+        const productExist = await Product.findOne({
+            $or: [{ productName }],
+        });
+
+        if (productExist) {
+            throw new ApiError(409, "Product already exist");
+        }
+
+          // Helper function to handle image uploads
+          const uploadImage = async (base64Image) => {
+            if (!base64Image) return "";
+            const uniqueSuffix = Date.now();
+            const imagePath = Base64ToFileConverter(base64Image, `./public/temp/productImage_${uniqueSuffix}.jpg`);
+            const imageUpload = await uploadOnCloudinary(String(imagePath));
+            return imageUpload.url;
+        };
+
+        // Upload product images
+        const productImageUrl = await uploadImage(productImage);
+        const productImageOneUrl = await uploadImage(productImageOne);
+        const productImageTwoUrl = await uploadImage(productImageTwo);
+        const productImageThreeUrl = await uploadImage(productImageThree);
+
+
         if (!productImageThreeUrl && req.body.productImageThree) {
             const productImageThreePath = Base64ToFileConverter(
                 req.body.productImageThree,
@@ -65,26 +126,12 @@ const CreateProduct = asyncHandler(async (req, res) => {
             productImageThreeUrl = productImageThreeUpload.url;
         }
 
-        // Here i check if any field are empty
-        if (
-            [
-                productName,
-                productPrice,
-                productQuantity,
-                productCategory,
-                productDescription,
-            ].some((field) => field.trim() === "")
-        ) {
-            throw new ApiError(400, "Fill all the fields");
-        }
-        // Check if the product already exists
-        const productExist = await Category.findOne({
-            $or: [{ productName }],
-        });
 
-        if (productExist) {
-            throw new ApiError(409, "Product already exist");
-        }
+
+
+
+
+
 
         // Here i create product in database
         const product = await Product.create({
@@ -116,7 +163,7 @@ const CreateProduct = asyncHandler(async (req, res) => {
 
 
 
-const getCategory = asyncHandler(async (req, res) => {
+const GetAllProduct = asyncHandler(async (req, res) => {
     //sorting category by creeated date
     const categoryList = await Category.find().sort({ createdAt: -1 });
 
@@ -127,4 +174,4 @@ const getCategory = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, categoryList, "Category List  Get success"));
 });
 
-export { CreateProduct, getCategory };
+export { CreateProduct, GetAllProduct };
