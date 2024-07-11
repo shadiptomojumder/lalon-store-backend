@@ -1,20 +1,22 @@
 import { Router } from "express";
+import {
+    CreateProduct,
+    DeleteProducts,
+    GetAllProducts,
+    GetSingleProduct,
+    UpdateProduct,
+} from "../controllers/product.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { upload } from "../middlewares/multer.middleware.js";
-import { CreateProduct, GetAllProduct } from "../controllers/product.controller.js";
 
 const router = Router();
+// Public Routes
+router.route("").get(GetAllProducts);
+router.route("/:productId").get(GetSingleProduct);
 
 
-
-router.route("").post(CreateProduct);
-router.route("").get(GetAllProduct);
-
-
-
-
-
-
-
+// Secured Routes
+router.route("").post(verifyJWT, CreateProduct);
+router.route("").delete(verifyJWT, DeleteProducts);
+router.route("/:productId").patch(verifyJWT, UpdateProduct);
 
 export default router;

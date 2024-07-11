@@ -23,7 +23,13 @@ const userSchema = new Schema(
             lowercase: true,
             trim: true,
             sparse: true,
-            default: "",
+        },
+        googleId: {
+            type: String,
+            unique: true,
+            lowercase: true,
+            trim: true,
+            sparse: true,
         },
         role: {
             type: String,
