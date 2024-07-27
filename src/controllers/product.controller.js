@@ -175,13 +175,37 @@ const GetAllProducts = asyncHandler(async (req, res) => {
         //console.log("Query Parameters:",req.query);
         const search = req.query.search || "";
         const category = req.query.category || "";
+        const sortBy = req.query.sortBy || ""; // New query parameter for sorting
+        const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1; // New query parameter for sort order
+    
 
         const query = {
             productName:{$regex:search,$options:"i"},
             productCategory:{$regex:category,$options:"i"},
         }
-        // Fetch all products sorted by createdAt date descending
-        const productList = await Product.find(query).sort({ createdAt: -1 });
+        
+        let sortOptions = {};
+        if (sortBy === 'price') {
+            sortOptions = { price: sortOrder };
+        }
+
+
+        // Fetch all products
+        //const productList = await Product.find(query).sort("-productPrice");
+
+        const productList = await Product.aggregate([
+            {
+                $match: query
+            },
+            {
+                $addFields: {
+                    price: { $toDouble: "$productPrice" }
+                }
+            },
+            {
+                $sort: sortOptions
+            }
+        ]);
 
         return res
             .status(201)
