@@ -193,6 +193,9 @@ const refreshAccessToken = asyncHandler( async (req, res)=> {
     // If refresh token exist then Find the user
     // Generate access token
     // Return response
+    //console.log("The request line 196 is :",req);
+    console.log("The request cookies line 197 is :",req.cookies);
+    console.log("The request body line 197 is :",req.body.refreshToken);
 
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken ;
 

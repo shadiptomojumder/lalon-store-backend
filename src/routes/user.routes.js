@@ -28,6 +28,7 @@ router.route("/verify-user").post(verifyUser);
 router.route("/generateOTP").post(generateOtp); // generate random OTP
 router.route("/verifyOTP").post(verifyOtp); // verify generated OTP
 router.route("/resetPassword").post(resetPassword);
+router.route("/refresh-token").post(refreshAccessToken);
 
 // Secured Routes
 router.route("").get(verifyJWT, getAllUser);
@@ -37,8 +38,6 @@ router.route("/:id").delete(verifyJWT, deleteUser);
 router.route("/:id").patch(verifyJWT, updateUser);
 
 router.route("/logout").post(verifyJWT, logoutUser);
-
-router.route("/refresh-token").post(refreshAccessToken);
 
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 

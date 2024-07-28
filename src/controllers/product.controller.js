@@ -177,6 +177,8 @@ const GetAllProducts = asyncHandler(async (req, res) => {
         const category = req.query.category || "";
         const sortBy = req.query.sortBy || ""; // New query parameter for sorting
         const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1; // New query parameter for sort order
+
+        console.log("The sortBy query from frontend is:",sortBy);
     
 
         const query = {
@@ -192,20 +194,40 @@ const GetAllProducts = asyncHandler(async (req, res) => {
 
         // Fetch all products
         //const productList = await Product.find(query).sort("-productPrice");
+        let productList = await Product.find(query);
 
-        const productList = await Product.aggregate([
-            {
-                $match: query
-            },
-            {
-                $addFields: {
-                    price: { $toDouble: "$productPrice" }
-                }
-            },
-            {
-                $sort: sortOptions
-            }
-        ]);
+        // if (sortBy === "asc") {
+        //     productList = productList.sort("-productPrice");
+        // }else if (sortBy === "desc") {
+        //     productList = productList.sort("productPrice");
+        // }
+
+        if (sortBy === "asc") {
+            productList = productList.sort((a, b) => a.productPrice - b.productPrice);
+        } else if (sortBy === "desc") {
+            productList = productList.sort((a, b) => b.productPrice - a.productPrice);
+        } else if (sortBy === "newest") {
+            productList = productList.sort((a, b) => a.createdAt - b.createdAt);
+        }
+
+
+
+
+
+
+        // const productList = await Product.aggregate([
+        //     {
+        //         $match: query
+        //     },
+        //     {
+        //         $addFields: {
+        //             price: { $toDouble: "$productPrice" }
+        //         }
+        //     },
+        //     {
+        //         $sort: sortOptions
+        //     }
+        // ]);
 
         return res
             .status(201)
@@ -314,7 +336,7 @@ const UpdateProduct = asyncHandler(async (req, res) => {
             });
         }
 
-        return res.status(200).json(new ApiResponse(200, updatedProduct, "Product retrieved successfully"));
+        return res.status(200).json(new ApiResponse(200, updatedProduct, "Product update successfully"));
     } catch (error) {
         console.error("Error deleting appointments:", error);
         return res.status(500).json(new ApiError(500, "Internal server error"));
