@@ -24,6 +24,7 @@ const router = Router();
 router.route("/register").post(registerUser);
 
 router.route("/login").post(loginUser);
+router.route("/logout").post(logoutUser);
 router.route("/verify-user").post(verifyUser);
 router.route("/generateOTP").post(generateOtp); // generate random OTP
 router.route("/verifyOTP").post(verifyOtp); // verify generated OTP
@@ -36,8 +37,6 @@ router.route("").get(verifyJWT, getAllUser);
 router.route("/:id").delete(verifyJWT, deleteUser);
 
 router.route("/:id").patch(verifyJWT, updateUser);
-
-router.route("/logout").post(verifyJWT, logoutUser);
 
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 

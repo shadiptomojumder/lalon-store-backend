@@ -162,8 +162,14 @@ const logoutUser = asyncHandler( async (req, res) => {
     // Remove refresh token from cookie
     // Return response
 
+    console.log("The Request 165 line:", req);
+    console.log("The Request body 166 line:", req.body);
+    console.log("The Request user 166 line:", req.user);
+
+    const UserId = req.body.userId
+
     await User.findByIdAndUpdate(
-        req.user._id,
+        UserId,
         {
             $unset: {
                 refreshToken: 1
@@ -193,50 +199,59 @@ const refreshAccessToken = asyncHandler( async (req, res)=> {
     // If refresh token exist then Find the user
     // Generate access token
     // Return response
-    //console.log("The request line 196 is :",req);
-    console.log("The request cookies line 197 is :",req.cookies);
-    console.log("The request body line 197 is :",req.body.refreshToken);
-
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken ;
+
+
+
+    console.log("incomingRefreshToken by body line 200 is:",req.body.refreshToken);
+    console.log("incomingRefreshToken by cookies line 201 is:",req.cookies.refreshToken);
+    console.log("incomingRefreshToken line 202 is:",incomingRefreshToken);
 
     if (!incomingRefreshToken) {
         throw new ApiError(401, "Unauthorized request")
     }
 
     try {
+        console.log("come to 207 line");
         const decodedToken = jwt.verify(
             incomingRefreshToken,
             process.env.REFRESH_TOKEN_SECRET
         )
-    
+        console.log("decodedToken is:",decodedToken);
+
         const user = await User.findById(decodedToken?._id);
+        console.log("Come here in line 217 and user is:",user);
         
         if (!user) {
-            throw new ApiError(401, "Unauthorized Refresh Token")
+            throw new ApiError(401, "Unauthorized: User not found");
         }
     
         if (incomingRefreshToken !== user?.refreshToken) {
-            throw new ApiError(401, "Refresh Token Expired")
+            throw new ApiError(401, "Unauthorized: Refresh token does not match");
         }
     
         const options = {
             httpOnly: true,
             secure: true,
         }
+
+        const accessToken = user.generateAccessToken();
     
-        const {accessToken , newRefreshToken} = await generateAccessTokenAndRefreshToken(user._id)
+        // const {accessToken } = await generateAccessTokenAndRefreshToken(user._id);
+        console.log("accessToken 229 is:",accessToken);
+        // Clear old tokens
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
     
         return res
         .status(200)
         .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", newRefreshToken, options)
         .json(
-            new ApiResponse(200,{accessToken , refreshToken :newRefreshToken},"Access Token Refreshed!")
+            new ApiResponse(200,{accessToken},"Access Token Refreshed!")
         )
     } catch (error) {
         throw new ApiError(401, error.message || "Invalid Refresh Token Error")
     }
-
 })
 
 const changeCurrentPassword = asyncHandler( async (req, res) => {
