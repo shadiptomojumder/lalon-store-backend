@@ -28,9 +28,12 @@ router
             failureRedirect: `${process.env.FORNTEND_HOST}/login`,
         }),
         (req, res) => {
-            console.log("The op Request:",req.user);
-            const  {newUser , refreshToken , accessToken } = req.user;
-            const loggedInUser = newUser;
+            console.log("The op Request:", req.user);
+            const  {newUser , accessToken } = req.user;
+            const refreshToken = newUser?.refreshToken
+
+            console.log("accessToken line35 :",accessToken);
+            console.log("refreshToken line35 :",refreshToken);
 
             const options = {
                 httpOnly: false,

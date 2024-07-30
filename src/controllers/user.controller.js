@@ -162,11 +162,11 @@ const logoutUser = asyncHandler( async (req, res) => {
     // Remove refresh token from cookie
     // Return response
 
-    console.log("The Request 165 line:", req);
+    //console.log("The Request 165 line:", req);
     console.log("The Request body 166 line:", req.body);
     console.log("The Request user 166 line:", req.user);
 
-    const UserId = req.body.userId
+    const UserId = req.body.userId || req.user._id
 
     await User.findByIdAndUpdate(
         UserId,

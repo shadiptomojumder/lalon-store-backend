@@ -10,7 +10,7 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 // Public Routes
-router.route("").get( verifyJWT , GetAllProducts);
+router.route("").get(GetAllProducts);
 router.route("/:productId").get(GetSingleProduct);
 
 
