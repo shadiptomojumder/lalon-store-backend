@@ -191,16 +191,9 @@ const GetAllProducts = asyncHandler(async (req, res) => {
             sortOptions = { price: sortOrder };
         }
 
-
         // Fetch all products
         //const productList = await Product.find(query).sort("-productPrice");
         let productList = await Product.find(query);
-
-        // if (sortBy === "asc") {
-        //     productList = productList.sort("-productPrice");
-        // }else if (sortBy === "desc") {
-        //     productList = productList.sort("productPrice");
-        // }
 
         if (sortBy === "asc") {
             productList = productList.sort((a, b) => a.productPrice - b.productPrice);
@@ -209,11 +202,6 @@ const GetAllProducts = asyncHandler(async (req, res) => {
         } else if (sortBy === "newest") {
             productList = productList.sort((a, b) => a.createdAt - b.createdAt);
         }
-
-
-
-
-
 
         // const productList = await Product.aggregate([
         //     {
