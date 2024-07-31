@@ -88,7 +88,6 @@ const CreateProduct = asyncHandler(async (req, res) => {
                 productPrice,
                 productQuantity,
                 productCategory,
-                productDescription,
             ].some((field) =>
                 typeof field === "string" ? field.trim() === "" : !field
             )

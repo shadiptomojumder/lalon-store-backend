@@ -31,9 +31,12 @@ const productSchema = new Schema(
         },
         productDescription: {
             type: String,
-            required: true,
             trim: true,
             index: true,
+        },
+        productStock: {
+            type: Number,
+            default:0
         },
         productImage: {
             type: String,
