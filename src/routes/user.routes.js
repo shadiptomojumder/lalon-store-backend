@@ -40,7 +40,7 @@ router.route("/:id").patch(verifyJWT, updateUser);
 
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 
-router.route("/current-user").get(verifyJWT, getCurrentUser);
+router.route("/current-user").get(getCurrentUser);
 
 router
     .route("/update-avatar")
