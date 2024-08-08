@@ -7,6 +7,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const router = Router();
 
 router.get("/google/failed", (req, res) => {
+    console.log("Faild route on");
+    
     throw new ApiError(401, "Failed to authenticate with Google");
 })
 
@@ -25,6 +27,7 @@ router
     .get(
         passport.authenticate("google", {
             session: false,
+            //successRedirect: `${process.env.FORNTEND_HOST}`,
             failureRedirect: `${process.env.FORNTEND_HOST}/login`,
         }),
         (req, res) => {
@@ -45,8 +48,9 @@ router
             res.cookie("accessToken", accessToken, options);
             res.cookie("refreshToken", refreshToken, options);
 
-            const userParam = encodeURIComponent(JSON.stringify(newUser));
-            return res.redirect(`${process.env.FORNTEND_HOST}/?user=${userParam}`);
+            // const userParam = encodeURIComponent(JSON.stringify(newUser));
+            // return res.redirect(`${process.env.FORNTEND_HOST}/?user=${userParam}`);
+            return res.redirect(`${process.env.FORNTEND_HOST}`);
         }
     );
 

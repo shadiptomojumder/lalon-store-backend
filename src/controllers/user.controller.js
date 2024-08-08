@@ -286,6 +286,9 @@ const changeCurrentPassword = asyncHandler( async (req, res) => {
 const getCurrentUser = asyncHandler( async (req, res) => {
     // Get current user from database
     // Return response
+
+    console.log("The current user is:", req.user);
+    
     return res
     .status(200)
     .json(
