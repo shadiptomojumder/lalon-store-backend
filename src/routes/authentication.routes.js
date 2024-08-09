@@ -28,29 +28,32 @@ router
         passport.authenticate("google", {
             session: false,
             //successRedirect: `${process.env.FORNTEND_HOST}`,
-            failureRedirect: `${process.env.FORNTEND_HOST_live}/login`,
+            failureRedirect: `${process.env.FORNTEND_HOST}/login`,
         }),
         (req, res) => {
             console.log("The op Request:", req.user);
             const  {newUser , accessToken } = req.user;
             const refreshToken = newUser?.refreshToken
 
-            console.log("accessToken line35 :",accessToken);
-            console.log("refreshToken line35 :",refreshToken);
+            console.log("accessToken line 38:",accessToken);
+            console.log("refreshToken line 39:",refreshToken);
 
             const options = {
-                httpOnly: false,
+                httpOnly: true,
                 secure: true,
                 sameSite: 'None',
                 maxAge: 24 * 60 * 60 * 1000 // 1 day in milliseconds
             };
         
-            res.cookie("accessToken", accessToken, options);
-            res.cookie("refreshToken", refreshToken, options);
+            // res.cookie("accessToken", accessToken, options);
+            // res.cookie("refreshToken", refreshToken, options);
 
             // const userParam = encodeURIComponent(JSON.stringify(newUser));
             // return res.redirect(`${process.env.FORNTEND_HOST}/?user=${userParam}`);
-            return res.redirect(`${process.env.FORNTEND_HOST_live}`);
+            return res
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", refreshToken, options)
+            .redirect(`${process.env.FORNTEND_HOST}`)
         }
     );
 
