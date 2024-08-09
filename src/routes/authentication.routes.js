@@ -28,7 +28,7 @@ router
         passport.authenticate("google", {
             session: false,
             //successRedirect: `${process.env.FORNTEND_HOST}`,
-            failureRedirect: `${process.env.FORNTEND_HOST}/login`,
+            failureRedirect: `${process.env.FORNTEND_HOST_live}/login`,
         }),
         (req, res) => {
             console.log("The op Request:", req.user);
@@ -50,7 +50,7 @@ router
 
             // const userParam = encodeURIComponent(JSON.stringify(newUser));
             // return res.redirect(`${process.env.FORNTEND_HOST}/?user=${userParam}`);
-            return res.redirect(`${process.env.FORNTEND_HOST}`);
+            return res.redirect(`${process.env.FORNTEND_HOST_live}`);
         }
     );
 
