@@ -34,15 +34,11 @@ router
             //console.log("The op Request:", req.user);
             const  {newUser , accessToken } = req.user;
             const refreshToken = newUser?.refreshToken
-
-            // console.log("accessToken line 38:",accessToken);
-            // console.log("refreshToken line 39:",refreshToken);
-
             const options = {
                 httpOnly: true,
                 secure: true,
                 sameSite: 'None',
-                domain: `${process.env.FORNTEND_HOST_live}`,
+                //domain: `${process.env.FORNTEND_HOST}`,
                 maxAge: 24 * 60 * 60 * 1000 // 1 day in milliseconds
             };
 
