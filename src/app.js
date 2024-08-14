@@ -17,11 +17,12 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin) || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+      callback(null, true);
+      // if (allowedOrigins.includes(origin) || !origin) {
+      //   callback(null, true);
+      // } else {
+      //   callback(new Error("Not allowed by CORS"));
+      // }
     },
     methods: "GET, POST, DELETE , PATCH , PUT",
     credentials: true,
@@ -39,12 +40,14 @@ app.use(passport.initialize());
 import userRouter from "./routes/user.routes.js";
 import paymentRouter from "./routes/payment.routes.js";
 import productRouter from "./routes/product.routes.js";
+import orderRouter from "./routes/order.routes.js";
 import authenticationRouter from "./routes/authentication.routes.js"
 
 // Route Declaration
 app.use("/api/users", userRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/product", productRouter);
+app.use("/api/order", orderRouter);
 
 // Authentication Routes
 app.use("/api/auth", authenticationRouter);
