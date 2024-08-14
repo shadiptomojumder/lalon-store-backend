@@ -547,6 +547,7 @@ const updateUser = asyncHandler( async (req, res) => {
         "fullname",
         "email",
         "phone",
+        "address",
         "role",
         "avatar",
     ]; // Replace with your actual field names

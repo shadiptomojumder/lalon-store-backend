@@ -24,6 +24,11 @@ const userSchema = new Schema(
             trim: true,
             sparse: true,
         },
+        address: {
+            type: String,
+            lowercase: true,
+            sparse: true,
+        },
         googleId: {
             type: String,
             unique: true,
