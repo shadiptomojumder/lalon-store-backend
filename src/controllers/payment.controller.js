@@ -114,7 +114,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
         { new: true }
     );
 
-    return res.redirect("http://localhost:3000/payment-success");
+    return res.redirect("https://lalon-store.vercel.app/payment-success");
 });
 
 export { paymentInit, paymentSuccess };
