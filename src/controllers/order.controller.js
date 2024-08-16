@@ -5,10 +5,9 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const GetAllOrder = asyncHandler(async (req, res) => {
     try {
-     const orderList = await Order.find().sort({ createdAt: -1 });
+        const orderList = await Order.find().sort({ createdAt: -1 });
 
-     console.log("orderList is:",orderList);
-     
+        console.log("orderList is:", orderList);
 
         return res
             .status(201)
@@ -32,8 +31,36 @@ const GetAllOrder = asyncHandler(async (req, res) => {
     }
 });
 
+const updateSingleOrder = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const requestedOrderId = id;
 
+    const updateData = {}; // Initialize an empty object for updates
 
+    // Check for each field in the request body and add it to updateData
+    const fieldsToUpdate = ["deliveryAddress", "deliveryStatus"]; // Replace with your actual field names
 
+    fieldsToUpdate.forEach((field) => {
+        if (req.body[field] !== undefined) {
+            updateData[field] = req.body[field];
+        }
+    });
 
-export {GetAllOrder}
+    const updatedOrder = await Order.findByIdAndUpdate(
+        requestedOrderId,
+        { $set: updateData },
+        { new: true }
+    );
+
+    return res
+        .status(201)
+        .json(
+            new ApiResponse(
+                200,
+                updatedOrder,
+                "Single Order update Get success"
+            )
+        );
+});
+
+export { GetAllOrder, updateSingleOrder };

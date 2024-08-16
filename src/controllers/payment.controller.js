@@ -104,7 +104,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
     const transactionId = req.params.tranId;
 
     const updatedProduct = await Order.findOneAndUpdate(
-      { transactionId: transactionId },
+        { transactionId: transactionId },
         {
             $set: {
                 paymentStatus: true,
@@ -113,8 +113,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
         { new: true }
     );
 
-    console.log("updatedProduct is:",updatedProduct);
-    
+    console.log("updatedProduct is:", updatedProduct);
 
     return res.redirect(`${process.env.FORNTEND_HOST_live}/payment-success`);
 });
