@@ -27,6 +27,13 @@ const orderSchema = new Schema(
                     ref: "Product",
                     required: true,
                 },
+                productName: {
+                    type: String,
+                    required: true,
+                    lowercase: true,
+                    trim: true,
+                    index: true,
+                },
                 productPrice: {
                     type: Number,
                     required: true,

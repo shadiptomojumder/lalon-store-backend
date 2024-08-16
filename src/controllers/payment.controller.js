@@ -50,7 +50,7 @@ const paymentInit = asyncHandler(async (req, res) => {
             total_amount: totalAmmount,
             currency: "BDT",
             tran_id: tran_id, // use unique tran_id for each api call
-            success_url: `${process.env.BACKEND_HOST}/api/payment/success/${tran_id}`,
+            success_url: `${process.env.BACKEND_HOST_live}/api/payment/success/${tran_id}`,
             fail_url: "http://localhost:3000/failed",
             cancel_url: "http://localhost:3000/cancle",
             ipn_url: "http://localhost:3000/ipn",
@@ -116,7 +116,7 @@ const paymentSuccess = asyncHandler(async (req, res) => {
     console.log("updatedProduct is:",updatedProduct);
     
 
-    return res.redirect(`${process.env.FORNTEND_HOST}/payment-success`);
+    return res.redirect(`${process.env.FORNTEND_HOST_live}/payment-success`);
 });
 
 export { paymentInit, paymentSuccess };
