@@ -32,7 +32,6 @@ const productSchema = new Schema(
         productDescription: {
             type: String,
             trim: true,
-            index: true,
         },
         productStock: {
             type: Number,
@@ -40,19 +39,15 @@ const productSchema = new Schema(
         },
         productImage: {
             type: String,
-            index: true,
         },
         productImageOne: {
             type: String,
-            index: true,
         },
         productImageTwo: {
             type: String,
-            index: true,
         },
         productImageThree: {
             type: String,
-            index: true,
         },
         // createdBy: {
         //     type: Schema.Types.ObjectId,

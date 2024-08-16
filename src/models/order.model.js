@@ -1,4 +1,4 @@
-import mongoose, { Schema ,Types } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 const orderSchema = new Schema(
     {
@@ -20,11 +20,31 @@ const orderSchema = new Schema(
             type: String,
             required: true,
         },
-        productIds: {
-            type: [Schema.Types.ObjectId],
-            ref: "Product",
-            required: true,
-        },
+        productList: [
+            {
+                productId: {
+                    type: Schema.Types.ObjectId,
+                    ref: "Product",
+                    required: true,
+                },
+                productPrice: {
+                    type: Number,
+                    required: true,
+                },
+                productQuantity: {
+                    type: String,
+                    required: true,
+                    lowercase: true,
+                },
+                productImage: {
+                    type: String,
+                },
+                productCount: {
+                    type: Number,
+                    required: true,
+                },
+            },
+        ],
         totalAmmount: {
             type: Number,
             required: true,
